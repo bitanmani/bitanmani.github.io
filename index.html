@@ -5,56 +5,240 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bitan Mani | Portfolio</title>
   <style>
-    body {
-      margin: 0;
+    :root{
+      --bg:#0b1220;
+      --card:#0f1a30;
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --link:#38bdf8;
+      --border: rgba(148,163,184,0.18);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
       font-family: Arial, Helvetica, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+      background: radial-gradient(1200px 600px at 30% 10%, #111c35 0%, var(--bg) 55%);
+      color:var(--text);
     }
-    .container {
-      max-width: 900px;
-      margin: 80px auto;
-      padding: 0 24px;
+    .container{
+      max-width: 980px;
+      margin: 70px auto;
+      padding: 0 22px;
     }
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
+    .hero{
+      padding: 34px 0 18px 0;
     }
-    h2 {
-      font-weight: normal;
-      color: #94a3b8;
-      margin-bottom: 30px;
+    h1{
+      font-size: 52px;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.6px;
     }
-    p {
+    .tagline{
+      color: var(--muted);
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+    .summary{
+      max-width: 820px;
       line-height: 1.7;
       font-size: 18px;
       color: #cbd5f5;
+      margin: 0 0 22px 0;
     }
-    .links a {
-      display: inline-block;
+    .links a{
+      display:inline-block;
       margin-right: 16px;
-      margin-top: 24px;
-      text-decoration: none;
-      color: #38bdf8;
-      font-weight: bold;
+      margin-top: 10px;
+      text-decoration:none;
+      color: var(--link);
+      font-weight: 700;
+    }
+    .section{
+      margin-top: 34px;
+      padding-top: 26px;
+      border-top: 1px solid var(--border);
+    }
+    .section h2{
+      margin: 0 0 14px 0;
+      font-size: 22px;
+      letter-spacing: -0.2px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px 16px 14px 16px;
+    }
+    .card h3{
+      margin: 0 0 6px 0;
+      font-size: 18px;
+    }
+    .card p{
+      margin: 0 0 10px 0;
+      color: #cbd5f5;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .meta{
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .pillrow{
+      margin-top: 10px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill{
+      font-size: 12px;
+      color: #cbd5f5;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(56,189,248,0.06);
+    }
+    .small{
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      max-width: 860px;
+    }
+    .cta{
+      display:flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    .btn{
+      display:inline-block;
+      padding: 10px 14px;
+      border-radius: 10px;
+      text-decoration:none;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: rgba(255,255,255,0.03);
+    }
+    .btn.primary{
+      border-color: rgba(56,189,248,0.35);
+      background: rgba(56,189,248,0.12);
+      color: #dbeafe;
+    }
+    footer{
+      margin: 40px 0 10px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media (max-width: 860px){
+      h1{font-size: 40px}
+      .grid{grid-template-columns: 1fr}
+      .container{margin: 46px auto}
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Bitan Mani</h1>
-    <h2>Product • AI • Analytics</h2>
+    <div class="hero">
+      <h1>Bitan Mani</h1>
+      <div class="tagline">Product • AI • Analytics</div>
+      <p class="summary">
+        I build data-backed products across trust &amp; safety, fraud/risk, and customer platforms.
+        I translate messy problems into clear requirements, scalable workflows, and measurable outcomes.
+      </p>
 
-    <p>
-      I’m a Product and Analytics professional with experience building AI-driven,
-      data-backed solutions across fraud, trust & safety, and customer platforms.
-      I focus on turning complex problems into scalable products with real business impact.
-    </p>
+      <div class="links">
+        <a href="https://github.com/bitanmani" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+      </div>
 
-    <div class="links">
-      <a href="https://github.com/bitanmani" target="_blank">GitHub</a>
-      <a href="https://www.linkedin.com" target="_blank">LinkedIn</a>
+      <div class="cta">
+        <a class="btn primary" href="#projects">View Projects</a>
+        <a class="btn" href="#contact">Contact</a>
+      </div>
+    </div>
+
+    <div class="section" id="about">
+      <h2>About</h2>
+      <div class="small">
+        Product-focused analyst with experience driving roadmap execution, experimentation, and risk controls.
+        Strengths include stakeholder alignment, KPI design, SQL/Python analytics, and building AI/ML-enabled workflows that reduce cost and improve quality.
+      </div>
+    </div>
+
+    <div class="section" id="projects">
+      <h2>Projects</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Multi-Agent AI Travel Planner</h3>
+          <p>Multi-agent planning system that researches destinations, pulls weather, optimizes logistics, and exports itineraries.</p>
+          <div class="meta">Impact: faster trip planning, structured outputs, exportable plans</div>
+          <div class="pillrow">
+            <span class="pill">Agents</span><span class="pill">RAG</span><span class="pill">Tool calling</span><span class="pill">Python</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Credit Card Fraud Detection</h3>
+          <p>ML-based fraud detection workflow with feature engineering, evaluation, and reporting for monitoring performance.</p>
+          <div class="meta">Impact: improved detection quality and explainability</div>
+          <div class="pillrow">
+            <span class="pill">ML</span><span class="pill">Python</span><span class="pill">EDA</span><span class="pill">Model evaluation</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>A/B Testing & Regression Analysis</h3>
+          <p>End-to-end experimentation analysis using regression to quantify marketing lift and drivers of conversion.</p>
+          <div class="meta">Impact: data-backed recommendations for campaign optimization</div>
+          <div class="pillrow">
+            <span class="pill">Experimentation</span><span class="pill">Stats</span><span class="pill">SQL</span><span class="pill">Regression</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Walmart Sales SQL Analysis</h3>
+          <p>SQL-driven analysis of sales patterns, top branches, and customer behavior to surface growth opportunities.</p>
+          <div class="meta">Impact: actionable insights for merchandising and ops</div>
+          <div class="pillrow">
+            <span class="pill">SQL</span><span class="pill">Analytics</span><span class="pill">KPIs</span><span class="pill">Reporting</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="skills">
+      <h2>Skills</h2>
+      <div class="pillrow">
+        <span class="pill">Product discovery</span>
+        <span class="pill">Roadmaps</span>
+        <span class="pill">Stakeholder management</span>
+        <span class="pill">SQL</span>
+        <span class="pill">Python</span>
+        <span class="pill">A/B testing</span>
+        <span class="pill">Dashboards</span>
+        <span class="pill">ML model lifecycle</span>
+        <span class="pill">Data governance</span>
+      </div>
+    </div>
+
+    <div class="section" id="contact">
+      <h2>Contact</h2>
+      <div class="small">
+        Email: <a href="mailto:bitanmani1995@gmail.com" style="color: var(--link); text-decoration:none;">bitan@example.com</a><br/>
+        LinkedIn: <a href="https://www.linkedin.com" target="_blank" style="color: var(--link); text-decoration:none;">Profile</a>
+      </div>
+      <footer>© <span id="y"></span> Bitan Mani</footer>
     </div>
   </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
