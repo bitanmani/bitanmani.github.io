@@ -1,686 +1,841 @@
-<!-- # index.html - Single-file GitHub Pages portfolio (tabs + thumbnails + headshot) -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- # Basic page metadata -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bitan Mani | Portfolio</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bitan Mani | Portfolio</title>
 
-    <!-- # Inline styles so GitHub Pages works without any build tools -->
-    <style>
-      /* # Reset / base */
-      * { box-sizing: border-box; }
-      html, body { margin: 0; padding: 0; }
-      body {
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-        background: linear-gradient(180deg, #6a4fb8 0%, #3a3f8f 100%);
-        color: #0f172a;
-      }
+  <style>
+    /* # Page background + base typography */
+    body {
+      margin: 0; /* # remove default browser spacing */
+      font-family: Arial, Helvetica, sans-serif; /* # clean, readable font */
+      background: linear-gradient(180deg, #6a57d5 0%, #3a3f8f 100%); /* # purple gradient */
+      color: #111827; /* # readable text color on white card */
+    }
 
-      /* # Layout wrapper */
-      .page {
-        max-width: 1100px;
-        margin: 0 auto;
-        padding: 48px 18px 60px;
-      }
+    /* # Hero header */
+    .hero {
+      text-align: center; /* # center align headline */
+      padding: 48px 16px 24px; /* # spacing around hero */
+      color: #ffffff; /* # white text on purple */
+    }
 
-      /* # Hero */
-      .hero {
-        text-align: center;
-        color: #fff;
-        margin-bottom: 22px;
-      }
-      .hero h1 {
-        margin: 0 0 10px;
-        font-size: 48px;
-        line-height: 1.05;
-        letter-spacing: -0.02em;
-      }
-      .hero p {
-        margin: 0;
-        font-size: 18px;
-        opacity: 0.95;
-      }
+    .hero h1 {
+      margin: 0; /* # tighten spacing */
+      font-size: 52px; /* # large title */
+      font-weight: 800; /* # bold */
+      letter-spacing: -0.5px; /* # modern look */
+    }
 
-      /* # Main card */
-      .card {
-        background: #ffffff;
-        border-radius: 18px;
-        overflow: hidden;
-        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
-      }
+    .hero p {
+      margin: 14px 0 0; /* # spacing under title */
+      font-size: 18px; /* # subtitle size */
+      opacity: 0.95; /* # slight softening */
+    }
 
-      /* # Tabs row */
-      .tabs {
-        display: flex;
-        gap: 6px;
-        padding: 14px 14px 0;
-        border-bottom: 1px solid #e5e7eb;
-        flex-wrap: wrap;
-        justify-content: center;
-        background: #fff;
-      }
-      .tab-btn {
-        border: 0;
-        background: transparent;
-        padding: 10px 14px;
-        border-radius: 12px 12px 0 0;
-        font-weight: 600;
-        color: #475569;
-        cursor: pointer;
-      }
-      .tab-btn.active {
-        background: #f3f4f6;
-        color: #111827;
-      }
+    /* # Main white card wrapper */
+    .card {
+      max-width: 1100px; /* # controls content width */
+      margin: 22px auto 40px; /* # center the card */
+      background: #ffffff; /* # white panel */
+      border-radius: 18px; /* # rounded corners */
+      overflow: hidden; /* # keep rounded corners clean */
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.18); /* # soft shadow */
+    }
 
-      /* # Content sections */
-      .content {
-        padding: 26px 26px 30px;
-      }
-      .section-title {
-        font-size: 34px;
-        margin: 0 0 10px;
-        color: #111827;
-        letter-spacing: -0.02em;
-      }
-      .accent-line {
-        width: 84px;
-        height: 4px;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #ff4bd8 0%, #4b7bff 100%);
-        margin: 10px 0 18px;
-      }
-      .muted {
-        color: #475569;
-        line-height: 1.7;
-        font-size: 16px;
-      }
+    /* # Top nav tabs */
+    .tabs {
+      display: flex; /* # horizontal row */
+      gap: 10px; /* # spacing between tabs */
+      padding: 14px 18px; /* # padding inside nav */
+      border-bottom: 1px solid #e5e7eb; /* # divider line */
+      overflow-x: auto; /* # scroll on small screens */
+      background: #ffffff; /* # white background */
+    }
 
-      /* # Two-column intro layout */
+    .tab {
+      border: 0; /* # remove default button border */
+      background: transparent; /* # clean tab look */
+      padding: 10px 14px; /* # tab padding */
+      border-radius: 12px; /* # rounded pill */
+      cursor: pointer; /* # clickable cursor */
+      font-weight: 700; /* # bold label */
+      color: #374151; /* # gray label */
+      white-space: nowrap; /* # keep one line */
+    }
+
+    .tab.active {
+      background: #f3f4f6; /* # highlight active tab */
+      color: #111827; /* # darker for active */
+    }
+
+    /* # Tab content sections */
+    .section {
+      display: none; /* # hidden by default */
+      padding: 28px; /* # padding inside section */
+    }
+
+    .section.active {
+      display: block; /* # show active section */
+    }
+
+    /* # Shared section header style */
+    .section h2 {
+      margin: 0 0 12px; /* # space under heading */
+      font-size: 36px; /* # big section title */
+      font-weight: 800; /* # strong */
+      color: #111827; /* # dark text */
+    }
+
+    .underline {
+      width: 76px; /* # underline width */
+      height: 4px; /* # underline thickness */
+      background: linear-gradient(90deg, #ec4899 0%, #6366f1 100%); /* # pink->indigo */
+      border-radius: 99px; /* # fully rounded */
+      margin-bottom: 18px; /* # spacing below underline */
+    }
+
+    /* # Two-column layout for intro section */
+    .intro-grid {
+      display: grid; /* # grid layout */
+      grid-template-columns: 1.2fr 0.8fr; /* # text wider than image */
+      gap: 28px; /* # spacing between columns */
+      align-items: center; /* # align vertically */
+    }
+
+    /* # Intro paragraph */
+    .intro-text {
+      font-size: 16px; /* # comfortable reading size */
+      line-height: 1.8; /* # readable line spacing */
+      color: #374151; /* # soft gray */
+    }
+
+    /* # Education block inside intro */
+    .edu-block {
+      margin-top: 18px; /* # spacing above education */
+    }
+
+    .edu-title {
+      margin: 0 0 10px; /* # spacing below label */
+      font-weight: 800; /* # bold label */
+      color: #111827; /* # dark */
+    }
+
+    .edu-item {
+      margin-bottom: 12px; /* # spacing between schools */
+    }
+
+    .edu-item .school {
+      font-weight: 800; /* # bold school name */
+      color: #111827; /* # dark */
+      margin-bottom: 4px; /* # space under school */
+    }
+
+    .edu-item .degree {
+      color: #374151; /* # gray degree text */
+    }
+
+    /* # Buttons */
+    .btn-row {
+      margin-top: 18px; /* # spacing above buttons */
+      display: flex; /* # row layout */
+      gap: 12px; /* # spacing between buttons */
+      flex-wrap: wrap; /* # wrap on small screens */
+    }
+
+    .btn {
+      border: 1px solid #d1d5db; /* # light border */
+      background: #ffffff; /* # white */
+      padding: 10px 14px; /* # button padding */
+      border-radius: 10px; /* # rounded */
+      cursor: pointer; /* # clickable */
+      font-weight: 800; /* # bold */
+      color: #111827; /* # dark text */
+      text-decoration: none; /* # no underline */
+      display: inline-flex; /* # align icon + text */
+      align-items: center; /* # vertical align */
+      gap: 10px; /* # icon spacing */
+    }
+
+    .btn.primary {
+      background: #4f46e5; /* # indigo button */
+      border-color: #4f46e5; /* # match border */
+      color: #ffffff; /* # white text */
+    }
+
+    /* # Headshot wrapper */
+    .headshot-wrap {
+      display: flex; /* # center the image */
+      justify-content: center; /* # horizontally centered */
+      align-items: center; /* # vertically centered */
+    }
+
+    /* # Headshot image: 400px and NO CROP */
+    .headshot {
+      width: 400px; /* # requested size */
+      height: 400px; /* # requested size */
+      border-radius: 999px; /* # perfect circle */
+      object-fit: contain; /* # IMPORTANT: shows entire image (no crop) */
+      object-position: center; /* # center inside the circle */
+      border: 10px solid rgba(0, 0, 0, 0.05); /* # subtle ring */
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12); /* # soft depth */
+      background: #ffffff; /* # clean fill behind image */
+      padding: 10px; /* # space around image when using contain */
+    }
+
+    /* # Responsive: reduce headshot on small screens */
+    @media (max-width: 980px) {
       .intro-grid {
-        display: grid;
-        grid-template-columns: 1.4fr 0.9fr;
-        gap: 22px;
-        align-items: center;
-      }
-      @media (max-width: 860px) {
-        .intro-grid { grid-template-columns: 1fr; }
+        grid-template-columns: 1fr; /* # stack on small screens */
       }
 
-      /* # Headshot container */
-      .headshot-wrap {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
       .headshot {
-        width: 220px;
-        height: 220px;
-        border-radius: 999px;
-        object-fit: cover;
-        border: 8px solid rgba(0, 0, 0, 0.05);
-        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.10);
-        background: #f1f5f9;
+        width: 280px; /* # mobile size */
+        height: 280px; /* # mobile size */
       }
+    }
 
-      /* # CTA buttons */
-      .cta-row {
-        margin-top: 18px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
+    /* # Skills layout */
+    .skills-grid {
+      display: grid; /* # grid layout */
+      grid-template-columns: repeat(2, minmax(0, 1fr)); /* # 2 columns */
+      gap: 16px; /* # spacing */
+    }
+
+    @media (max-width: 900px) {
+      .skills-grid {
+        grid-template-columns: 1fr; /* # stack on small screens */
       }
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-        background: #ffffff;
-        color: #111827;
-        font-weight: 700;
-        text-decoration: none;
-        cursor: pointer;
+    }
+
+    .skill-card {
+      border: 1px solid #e5e7eb; /* # light border */
+      border-radius: 14px; /* # rounded */
+      padding: 16px; /* # inner spacing */
+      background: #ffffff; /* # white */
+    }
+
+    .skill-card h3 {
+      margin: 0 0 8px; /* # spacing */
+      font-size: 18px; /* # title size */
+      font-weight: 900; /* # bold */
+      color: #111827; /* # dark */
+    }
+
+    .skill-card p {
+      margin: 0; /* # reset default margins */
+      color: #374151; /* # gray */
+      line-height: 1.7; /* # readability */
+      font-size: 14.5px; /* # slightly smaller */
+    }
+
+    /* # Projects grid */
+    .projects-grid {
+      display: grid; /* # grid layout */
+      grid-template-columns: repeat(2, minmax(0, 1fr)); /* # 2 columns */
+      gap: 18px; /* # spacing */
+    }
+
+    @media (max-width: 980px) {
+      .projects-grid {
+        grid-template-columns: 1fr; /* # stack */
       }
-      .btn.primary {
-        background: #4b7bff;
-        border-color: #4b7bff;
-        color: #ffffff;
-      }
+    }
 
-      /* # Pills */
-      .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-      .pill {
-        font-size: 12px;
-        font-weight: 700;
-        padding: 6px 10px;
-        border-radius: 999px;
-        background: #f1f5f9;
-        color: #0f172a;
-        border: 1px solid #e2e8f0;
-      }
+    .project-card {
+      border: 1px solid #e5e7eb; /* # border */
+      border-radius: 16px; /* # rounded */
+      overflow: hidden; /* # keep image corners clean */
+      background: #ffffff; /* # white */
+      display: flex; /* # vertical layout */
+      flex-direction: column; /* # stack image+content */
+    }
 
-      /* # Projects grid */
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-        margin-top: 10px;
-      }
-      @media (max-width: 860px) {
-        .grid { grid-template-columns: 1fr; }
-      }
+    .project-thumb {
+      width: 100%; /* # full width */
+      height: 180px; /* # fixed height thumbnail */
+      object-fit: cover; /* # fill thumbnail area */
+      background: #f3f4f6; /* # fallback */
+    }
 
-      .proj-card {
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
-        overflow: hidden;
-        background: #ffffff;
-      }
-      .proj-thumb {
-        width: 100%;
-        height: 170px;
-        object-fit: cover;
-        background: #f8fafc;
-        display: block;
-      }
-      .proj-body {
-        padding: 14px 14px 16px;
-      }
-      .proj-top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-      }
-      .proj-title {
-        margin: 0;
-        font-size: 16px;
-        color: #111827;
-        font-weight: 800;
-      }
-      .proj-desc {
-        margin: 10px 0 0;
-        color: #475569;
-        line-height: 1.6;
-        font-size: 14px;
-      }
+    .project-body {
+      padding: 16px; /* # spacing */
+    }
 
-      /* # Icon buttons */
-      .icon-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        border: 1px solid #e5e7eb;
-        background: #ffffff;
-        text-decoration: none;
-      }
-      .icon-link:hover { background: #f8fafc; }
-      .icon {
-        width: 18px;
-        height: 18px;
-        fill: #111827;
-      }
+    .project-top {
+      display: flex; /* # title + icons row */
+      align-items: center; /* # align vertically */
+      justify-content: space-between; /* # space between */
+      gap: 12px; /* # spacing */
+    }
 
-      /* # Contact card */
-      .contact-box {
-        border: 1px solid #e5e7eb;
-        border-radius: 14px;
-        padding: 14px;
-        background: #ffffff;
-        max-width: 720px;
-      }
-      .kv {
-        display: grid;
-        grid-template-columns: 160px 1fr;
-        gap: 10px 12px;
-        align-items: start;
-        margin-top: 6px;
-      }
-      @media (max-width: 560px) {
-        .kv { grid-template-columns: 1fr; }
-      }
-      .k { color: #475569; font-weight: 800; font-size: 13px; }
-      .v { color: #0f172a; font-size: 14px; line-height: 1.6; }
+    .project-title {
+      margin: 0; /* # reset */
+      font-size: 18px; /* # title size */
+      font-weight: 900; /* # bold */
+      color: #111827; /* # dark */
+    }
 
-      /* # Footer */
-      .footer {
-        text-align: center;
-        color: rgba(255,255,255,0.9);
-        margin-top: 18px;
-        font-size: 13px;
-      }
+    .icon-row {
+      display: flex; /* # icons row */
+      gap: 10px; /* # spacing */
+      align-items: center; /* # align */
+    }
 
-      /* # Tab panel visibility */
-      .panel { display: none; }
-      .panel.active { display: block; }
-    </style>
-  </head>
+    .icon-link {
+      display: inline-flex; /* # align */
+      width: 34px; /* # icon button size */
+      height: 34px; /* # icon button size */
+      border-radius: 10px; /* # rounded */
+      border: 1px solid #e5e7eb; /* # border */
+      align-items: center; /* # center icon */
+      justify-content: center; /* # center icon */
+      text-decoration: none; /* # remove underline */
+      background: #ffffff; /* # white */
+      cursor: pointer; /* # clickable */
+    }
 
-  <body>
-    <div class="page">
-      <!-- # HERO -->
-      <div class="hero">
-        <h1>Hi, I’m Bitan!</h1>
-        <p>I am a Product and Analytics professional working across Product, Data, Business Operations and Strategy.</p>
-      </div>
+    .project-desc {
+      margin: 10px 0 0; /* # spacing */
+      color: #374151; /* # gray */
+      line-height: 1.7; /* # readability */
+      font-size: 14.5px; /* # body size */
+    }
 
-      <!-- # MAIN CARD -->
-      <div class="card">
-        <!-- # TABS -->
-        <div class="tabs" role="tablist" aria-label="Portfolio sections">
-          <!-- # Note: data-tab matches the panel id -->
-          <button class="tab-btn active" data-tab="intro" role="tab" aria-selected="true">Introduction</button>
-          <button class="tab-btn" data-tab="skillsets" role="tab" aria-selected="false">Skillsets</button>
-          <button class="tab-btn" data-tab="projects" role="tab" aria-selected="false">Projects</button>
-          <button class="tab-btn" data-tab="tableau" role="tab" aria-selected="false">Tableau Public Profile</button>
-          <button class="tab-btn" data-tab="certifications" role="tab" aria-selected="false">Certifications</button>
-          <button class="tab-btn" data-tab="contact" role="tab" aria-selected="false">Contact</button>
-        </div>
+    .chips {
+      margin-top: 12px; /* # spacing */
+      display: flex; /* # row */
+      flex-wrap: wrap; /* # wrap */
+      gap: 8px; /* # spacing */
+    }
 
-        <!-- # CONTENT -->
-        <div class="content">
-          <!-- ===================== -->
-          <!-- # INTRODUCTION PANEL  -->
-          <!-- ===================== -->
-          <section id="intro" class="panel active" role="tabpanel">
-            <h2 class="section-title">A Little About Me</h2>
-            <div class="accent-line"></div>
+    .chip {
+      font-size: 12px; /* # small */
+      padding: 6px 10px; /* # padding */
+      border-radius: 999px; /* # pill */
+      background: #f3f4f6; /* # light */
+      border: 1px solid #e5e7eb; /* # border */
+      color: #111827; /* # dark text */
+      font-weight: 700; /* # bold */
+    }
 
-            <div class="intro-grid">
-              <div>
-                <p class="muted">
-                  I have 6+ years of experience helping organizations drive growth and build scalable product solutions
-                  through data-driven decisions and customer-focused product strategies across startups and Fortune 500 companies.
-                </p>
+    /* # Simple link box for Tableau tab */
+    .link-box {
+      border: 1px solid #e5e7eb; /* # border */
+      border-radius: 14px; /* # rounded */
+      padding: 18px; /* # spacing */
+      background: #ffffff; /* # white */
+      color: #374151; /* # gray text */
+      line-height: 1.7; /* # readability */
+    }
 
-                <!-- # Education moved into Introduction (per your request) -->
-                <div style="margin-top: 16px;">
-                  <div style="font-weight: 900; color: #111827; margin-bottom: 8px;">Education</div>
+    .link-box a {
+      color: #4f46e5; /* # indigo */
+      font-weight: 800; /* # bold */
+      text-decoration: none; /* # no underline */
+    }
 
-                  <div class="muted" style="margin-bottom: 10px;">
-                    <div style="font-weight: 800; color:#0f172a;">University of Arizona — Eller College of Management</div>
-                    <div>Master of Business Administration (MBA)</div>
-                  </div>
+    /* # Certifications list */
+    .cert-list {
+      border: 1px solid #e5e7eb; /* # border */
+      border-radius: 14px; /* # rounded */
+      padding: 18px; /* # spacing */
+      background: #ffffff; /* # white */
+    }
 
-                  <div class="muted" style="margin-bottom: 10px;">
-                    <div style="font-weight: 800; color:#0f172a;">University of Arizona — Eller College of Management</div>
-                    <div>Master of Science in Management Information Systems (MS-MIS)</div>
-                  </div>
+    .cert-item {
+      display: flex; /* # row */
+      gap: 12px; /* # spacing */
+      align-items: center; /* # align */
+      color: #111827; /* # dark */
+      font-weight: 800; /* # bold */
+    }
 
-                  <div class="muted">
-                    <div style="font-weight: 800; color:#0f172a;">Maulana Abul Kalam Azad University of Technology</div>
-                    <div>Bachelor of Technology in Mechanical Engineering (BTech)</div>
-                  </div>
-                </div>
+    /* # Contact card */
+    .contact-card {
+      border: 1px solid #e5e7eb; /* # border */
+      border-radius: 14px; /* # rounded */
+      padding: 18px; /* # spacing */
+      background: #ffffff; /* # white */
+    }
 
-                <div class="cta-row">
-                  <!-- # Buttons that switch tabs (no page reload) -->
-                  <button class="btn primary" type="button" data-jump="projects">View Projects</button>
-                  <button class="btn" type="button" data-jump="contact">Contact</button>
-                </div>
-              </div>
+    .contact-row {
+      display: grid; /* # two-column grid for labels/values */
+      grid-template-columns: 140px 1fr; /* # label width */
+      gap: 10px 16px; /* # spacing */
+      align-items: start; /* # align top */
+      color: #374151; /* # gray */
+      font-size: 15px; /* # readable */
+      line-height: 1.7; /* # readable */
+    }
 
-              <div class="headshot-wrap">
-                <!--
-                  # Your headshot file name contains a space:
-                  # "New_Headshot .png"
-                  # In URLs, spaces must be encoded as %20
-                  # This src assumes the file is inside /images/ in your repo
-                -->
-                <img
-                  class="headshot"
-                  src="images/New_Headshot%20.png"
-                  alt="Bitan Mani headshot"
-                />
-              </div>
-            </div>
-          </section>
+    .contact-row .label {
+      font-weight: 900; /* # bold labels */
+      color: #111827; /* # darker */
+    }
 
-          <!-- ===================== -->
-          <!-- # SKILLSETS PANEL     -->
-          <!-- ===================== -->
-          <section id="skillsets" class="panel" role="tabpanel">
-            <h2 class="section-title">Skillsets</h2>
-            <div class="accent-line"></div>
+    .contact-actions {
+      margin-top: 16px; /* # spacing */
+      display: flex; /* # row */
+      gap: 12px; /* # spacing */
+      flex-wrap: wrap; /* # wrap */
+    }
 
-            <div class="contact-box">
-              <div class="muted"><b>Reporting & Visualization:</b> Power BI, Tableau, QuickSight, Google Analytics, Alteryx.</div>
-              <div class="muted" style="margin-top: 10px;"><b>Data Analysis:</b> SQL, Python (Pandas, NumPy), Advanced Excel, EDA, Statistical Modeling, Predictive Analytics.</div>
-              <div class="muted" style="margin-top: 10px;"><b>Tools:</b> AWS, MS Project, MS Visio, JIRA, Lucidcharts, Confluence, Salesforce.</div>
-              <div class="muted" style="margin-top: 10px;"><b>AI & Innovation:</b> GenAI, LLM Prompting, ML Ops, Agentic AI, Model Governance.</div>
-              <div class="muted" style="margin-top: 10px;"><b>Product Management:</b> Road mapping, Vision Mapping, User Stories, MVP, PRD, Feature Prioritization, KPI Measurement, GTM, Scrum, Waterfall, Kanban, Agile.</div>
-            </div>
-          </section>
+    /* # Footer */
+    .footer {
+      text-align: center; /* # center */
+      color: rgba(255, 255, 255, 0.9); /* # soft white */
+      padding: 16px; /* # spacing */
+      font-size: 13px; /* # small */
+    }
 
-          <!-- ===================== -->
-          <!-- # PROJECTS PANEL      -->
-          <!-- ===================== -->
-          <section id="projects" class="panel" role="tabpanel">
-            <h2 class="section-title">Projects</h2>
-            <div class="accent-line"></div>
+    /* # Inline SVG icons (GitHub/LinkedIn) */
+    .svg-icon {
+      width: 18px; /* # icon size */
+      height: 18px; /* # icon size */
+      fill: currentColor; /* # inherit color */
+    }
+  </style>
+</head>
 
-            <div class="grid">
-              <!-- # Project 1 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/agentic-ai-travel-planner.png" alt="Agentic AI Travel Planner thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">Agentic AI Travel Planner</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/AI_Travel_Planner_LangGraph_-_MCP_Servers" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <!-- # GitHub icon (inline SVG so no external assets needed) -->
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    A multi-agent AI Travel Planner built with LangGraph that orchestrates specialized agents to research destinations,
-                    analyze weather, plan logistics, estimate budgets, recommend hotels and activities, and generate a personalized day-by-day itinerary.
-                    The system uses a stateful, cyclic workflow with tool calls, validation, and retries to produce reliable, end-to-end travel plans.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">LangGraph</span><span class="pill">Agentic AI</span><span class="pill">Tool calling</span><span class="pill">Streamlit</span>
-                  </div>
-                </div>
-              </article>
+<body>
+  <!-- # HERO HEADER -->
+  <div class="hero">
+    <h1>Hi, I’m Bitan!</h1>
+    <p>I am a Product and Analytics professional working across Product, Data, Business Operations and Strategy.</p>
+  </div>
 
-              <!-- # Project 2 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/multi-agent-chatbot.png" alt="Multi Agent Chatbot thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">Multi Agent Chatbot</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/Multi-AI-Agent-Chatbot" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    A persona-driven, multi-agent AI chatbot platform designed to deliver accurate, safe, and domain-specific assistance across sensitive
-                    and regulated domains such as fitness, mental health, personal finance, immigration, and parenting. The system routes user intent to
-                    specialized agents, grounds responses using RAG, and enforces domain guardrails and disclaimers.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">Multi-agent</span><span class="pill">RAG</span><span class="pill">Routing</span><span class="pill">Governance</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- # Project 3 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/customer-service-agent.png" alt="Customer Service Agent thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">Customer Service Agent (MVP)</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/Customer-Service-Agent" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    An AI-powered Customer Support Agent that handles end-to-end customer queries by understanding intent, retrieving relevant information,
-                    and generating clear, context-aware responses. The system simulates a real customer support workflow with escalation logic and validation.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">Conversational AI</span><span class="pill">Intent</span><span class="pill">RAG</span><span class="pill">Workflow</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- # Project 4 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/vendor-performance-analysis.png" alt="Vendor Performance Analysis thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">End-to-end Vendor Performance Data Analysis</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/End-to-end-Vendor-Performance-Analysis" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    Evaluates sales, profitability, inventory turnover, and vendor concentration to identify operational inefficiencies and revenue optimization opportunities.
-                    Combines Python-based analysis with executive-ready Power BI dashboards to deliver pricing, purchasing, and vendor strategy recommendations.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">EDA</span><span class="pill">Power BI</span><span class="pill">Profitability</span><span class="pill">Strategy</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- # Project 5 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/ab-testing-regression.png" alt="A/B Testing & Regression thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">A/B Testing and Regression Analysis</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/ab-testing-regression-marketing-campaigns" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    Evaluates the effectiveness of Facebook Ads versus Google AdWords using one year of daily campaign data.
-                    Applies controlled experimentation and regression modeling to validate statistical significance and translate results into ROI-focused spend recommendations.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">A/B testing</span><span class="pill">Regression</span><span class="pill">Inference</span><span class="pill">Marketing</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- # Project 6 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/credit-card-fraud-detection.png" alt="Credit Card Fraud Detection thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">Credit Card Fraud Detection Analysis</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/CC-Fraud-Detection-ML-Rules-LLM" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    Converts raw transaction data into deployable approve, review, or block decisions. Combines ML risk scoring with business rules and
-                    operational constraints to reduce fraud loss while minimizing customer friction and staying within manual review capacity.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">Fraud</span><span class="pill">Threshold tuning</span><span class="pill">Hybrid rules + ML</span><span class="pill">Precision/Recall</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- # Project 7 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/customer-churn-prediction.png" alt="Customer Churn Prediction thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">Customer Churn Prediction with Machine Learning</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/Customer-Churn-Predcition-Using-Machine-Learning" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    Uses machine learning to identify customers at high risk of leaving a telecom service. Analyzes demographics, account details,
-                    service usage, and billing patterns to uncover churn drivers and support proactive retention strategies.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">Churn</span><span class="pill">Feature engineering</span><span class="pill">Classification</span><span class="pill">Segmentation</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- # Project 8 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/walmart-sales-sql.png" alt="Walmart Sales SQL Analysis thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">Walmart Sales Analysis with SQL</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/Walmart-Sales-Data-Analysis-Using-SQL" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    SQL-driven analysis across sales trends, revenue, customer behavior, and time-based patterns. Covers joins, aggregations,
-                    window functions, date/time analysis, and query optimization to generate practical business insights.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">SQL</span><span class="pill">Window functions</span><span class="pill">Trends</span><span class="pill">Optimization</span>
-                  </div>
-                </div>
-              </article>
-
-              <!-- # Project 9 -->
-              <article class="proj-card">
-                <img class="proj-thumb" src="images/customer-behavior-analysis.png" alt="Customer Behavior Analysis thumbnail" />
-                <div class="proj-body">
-                  <div class="proj-top">
-                    <h3 class="proj-title">Customer Behavior Analysis</h3>
-                    <a class="icon-link" href="https://github.com/bitanmani/Customer-Shopping-Behavior-Analysis" target="_blank" rel="noopener" aria-label="Open GitHub repo">
-                      <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                      </svg>
-                    </a>
-                  </div>
-                  <p class="proj-desc">
-                    Combines SQL, Python, and Power BI to analyze browsing and purchasing patterns, promotion response, frequency, and basket behavior.
-                    Produces segmentation and retention insights to inform marketing and customer strategy.
-                  </p>
-                  <div class="pill-row">
-                    <span class="pill">SQL</span><span class="pill">Python</span><span class="pill">Power BI</span><span class="pill">Segmentation</span>
-                  </div>
-                </div>
-              </article>
-            </div>
-          </section>
-
-          <!-- ===================== -->
-          <!-- # TABLEAU PANEL       -->
-          <!-- ===================== -->
-          <section id="tableau" class="panel" role="tabpanel">
-            <h2 class="section-title">Tableau Public Profile</h2>
-            <div class="accent-line"></div>
-
-            <div class="contact-box">
-              <p class="muted" style="margin: 0 0 12px;">
-                Explore my Tableau dashboards and visual analytics work here.
-              </p>
-              <a class="btn primary" href="https://public.tableau.com/app/profile/bitan.mani/vizzes" target="_blank" rel="noopener">
-                Open Tableau Public
-              </a>
-            </div>
-          </section>
-
-          <!-- ===================== -->
-          <!-- # CERTIFICATIONS      -->
-          <!-- ===================== -->
-          <section id="certifications" class="panel" role="tabpanel">
-            <h2 class="section-title">Certifications</h2>
-            <div class="accent-line"></div>
-
-            <div class="contact-box">
-              <div class="muted"><b>CSPO</b> (Certified Scrum Product Owner)</div>
-            </div>
-          </section>
-
-          <!-- ===================== -->
-          <!-- # CONTACT PANEL       -->
-          <!-- ===================== -->
-          <section id="contact" class="panel" role="tabpanel">
-            <h2 class="section-title">Contact</h2>
-            <div class="accent-line"></div>
-
-            <div class="contact-box">
-              <div class="kv">
-                <div class="k">Email</div>
-                <div class="v"><a href="mailto:bitanmani1995@gmail.com">bitanmani1995@gmail.com</a></div>
-
-                <div class="k">Phone</div>
-                <div class="v"><a href="tel:+15205358423">520-535-8423</a></div>
-
-                <div class="k">Address</div>
-                <div class="v">United States (Open to relocation anywhere within the US)</div>
-
-                <div class="k">Links</div>
-                <div class="v" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                  <!-- # GitHub icon with embedded link -->
-                  <a class="icon-link" href="https://github.com/bitanmani" target="_blank" rel="noopener" aria-label="Open GitHub profile">
-                    <svg class="icon" viewBox="0 0 16 16" aria-hidden="true">
-                      <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
-                    </svg>
-                  </a>
-
-                  <!-- # LinkedIn icon with embedded link -->
-                  <a class="icon-link" href="https://www.linkedin.com/in/bitan-mani/" target="_blank" rel="noopener" aria-label="Open LinkedIn profile">
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.95v5.66H9.37V9h3.41v1.56h.05c.47-.9 1.62-1.85 3.34-1.85 3.57 0 4.23 2.35 4.23 5.41v6.33ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM3.56 20.45h3.56V9H3.56v11.45Z"/>
-                    </svg>
-                  </a>
-
-                  <!-- # Tableau link as a standard button (optional here too) -->
-                  <a class="btn" href="https://public.tableau.com/app/profile/bitan.mani/vizzes" target="_blank" rel="noopener">
-                    Tableau
-                  </a>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-
-      <div class="footer">© 2026 Bitan Mani</div>
+  <!-- # MAIN CARD -->
+  <div class="card">
+    <!-- # NAV TABS -->
+    <div class="tabs">
+      <button class="tab active" data-target="intro">Introduction</button>
+      <button class="tab" data-target="skills">Skillsets</button>
+      <button class="tab" data-target="projects">Projects</button>
+      <button class="tab" data-target="tableau">Tableau Public Profile</button>
+      <button class="tab" data-target="certs">Certifications</button>
+      <button class="tab" data-target="contact">Contact</button>
     </div>
 
-    <!-- # Inline JS to switch tabs + allow buttons to jump to specific tabs -->
-    <script>
-      // # Grab all tab buttons and panels
-      const tabButtons = Array.from(document.querySelectorAll(".tab-btn"));
-      const panels = Array.from(document.querySelectorAll(".panel"));
+    <!-- # INTRO SECTION -->
+    <section id="intro" class="section active">
+      <h2>A Little About Me</h2>
+      <div class="underline"></div>
 
-      // # Helper: activate a tab by id
-      function activateTab(tabId) {
-        // # Update tab button active state
-        tabButtons.forEach((btn) => {
-          const isActive = btn.dataset.tab === tabId;
-          btn.classList.toggle("active", isActive);
-          btn.setAttribute("aria-selected", String(isActive));
-        });
+      <div class="intro-grid">
+        <div>
+          <div class="intro-text">
+            I have 6+ years of experience helping organizations drive growth and build scalable product solutions through data-driven decisions and customer-focused product strategies across startups and Fortune 500 companies.
+          </div>
 
-        // # Show the selected panel and hide the rest
-        panels.forEach((panel) => {
-          panel.classList.toggle("active", panel.id === tabId);
-        });
+          <div class="edu-block">
+            <div class="edu-title">Education</div>
 
-        // # Scroll to top of the card for a clean UX
-        document.querySelector(".card").scrollIntoView({ behavior: "smooth", block: "start" });
-      }
+            <div class="edu-item">
+              <div class="school">University of Arizona — Eller College of Management</div>
+              <div class="degree">Master of Business Administration (MBA)</div>
+            </div>
 
-      // # Click behavior for tab buttons
-      tabButtons.forEach((btn) => {
-        btn.addEventListener("click", () => activateTab(btn.dataset.tab));
+            <div class="edu-item">
+              <div class="school">University of Arizona — Eller College of Management</div>
+              <div class="degree">Master of Science in Management Information Systems (MS-MIS)</div>
+            </div>
+
+            <div class="edu-item">
+              <div class="school">Maulana Abul Kalam Azad University of Technology</div>
+              <div class="degree">Bachelor of Technology in Mechanical Engineering (BTech)</div>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <a class="btn primary" href="#projects" onclick="openTab('projects'); return false;">View Projects</a>
+            <a class="btn" href="#contact" onclick="openTab('contact'); return false;">Contact</a>
+          </div>
+        </div>
+
+        <div class="headshot-wrap">
+          <!-- # IMPORTANT: file name has a space before .png, keep it EXACT -->
+          <img class="headshot" src="images/New_Headshot%20.png" alt="Bitan Mani headshot" />
+        </div>
+      </div>
+    </section>
+
+    <!-- # SKILLS SECTION -->
+    <section id="skills" class="section">
+      <h2>Skillsets</h2>
+      <div class="underline"></div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>Reporting & Visualization</h3>
+          <p>Power BI, Tableau, QuickSight, Google Analytics, Alteryx.</p>
+        </div>
+
+        <div class="skill-card">
+          <h3>Data Analysis</h3>
+          <p>SQL, Python (Pandas, NumPy), Advanced Excel, EDA, Statistical Modeling, Predictive Analytics.</p>
+        </div>
+
+        <div class="skill-card">
+          <h3>Tools</h3>
+          <p>AWS, MS Project, MS Visio, JIRA, Lucidcharts, Confluence, Salesforce.</p>
+        </div>
+
+        <div class="skill-card">
+          <h3>AI & Innovation</h3>
+          <p>GenAI, LLM Prompting, ML Ops, Agentic AI, Model Governance.</p>
+        </div>
+
+        <div class="skill-card">
+          <h3>Product Management</h3>
+          <p>Road mapping, Vision Mapping, User Stories, MVP, PRD, Feature Prioritization, KPI Measurement, GTM, Scrum, Waterfall, Kanban, Agile.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- # PROJECTS SECTION -->
+    <section id="projects" class="section">
+      <h2>Projects</h2>
+      <div class="underline"></div>
+
+      <div class="projects-grid">
+        <!-- # 1 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/agentic-ai-travel-planner.png" alt="Agentic AI Travel Planner thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">Agentic AI Travel Planner</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/AI_Travel_Planner_LangGraph_-_MCP_Servers" target="_blank" aria-label="GitHub - Agentic AI Travel Planner">
+                  <!-- # GitHub icon -->
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              A multi-agent AI Travel Planner built with LangGraph that orchestrates specialized agents to research destinations, analyze weather, plan logistics, estimate budgets, recommend hotels and activities, and generate a personalized day-by-day itinerary. The system uses a stateful, cyclic workflow with tool calls, validation, and retries to produce reliable, end-to-end travel plans.
+            </p>
+            <div class="chips">
+              <span class="chip">LangGraph</span>
+              <span class="chip">Multi-agent</span>
+              <span class="chip">Tool calling</span>
+              <span class="chip">Python</span>
+              <span class="chip">Streamlit</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 2 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/multi-agent-chatbot.png" alt="Multi Agent Chatbot thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">Multi Agent Chatbot</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/Multi-AI-Agent-Chatbot" target="_blank" aria-label="GitHub - Multi Agent Chatbot">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              A persona-driven, multi-agent AI chatbot platform designed to deliver accurate, safe, and domain-specific assistance across sensitive and regulated domains such as fitness, mental health, personal finance, immigration, and parenting. The system routes user intent to specialized agents, grounds responses using RAG, and enforces domain guardrails and disclaimers.
+            </p>
+            <div class="chips">
+              <span class="chip">LangChain</span>
+              <span class="chip">RAG</span>
+              <span class="chip">Routing</span>
+              <span class="chip">Guardrails</span>
+              <span class="chip">Python</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 3 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/customer-service-agent.png" alt="Customer Service Agent thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">Customer Service Agent (MVP)</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/Customer-Service-Agent" target="_blank" aria-label="GitHub - Customer Service Agent">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              An AI-powered Customer Support Agent that handles end-to-end customer queries by understanding intent, retrieving relevant information, and generating clear, context-aware responses. It simulates a real support workflow with escalation logic and reliability checks.
+            </p>
+            <div class="chips">
+              <span class="chip">Conversational AI</span>
+              <span class="chip">Intent detection</span>
+              <span class="chip">RAG</span>
+              <span class="chip">State</span>
+              <span class="chip">Python</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 4 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/vendor-performance-analysis.png" alt="Vendor Performance Analysis thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">End-to-end Vendor Performance Data Analysis</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/End-to-end-Vendor-Performance-Analysis" target="_blank" aria-label="GitHub - Vendor Performance Analysis">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              Evaluates sales, profitability, inventory turnover, and vendor concentration to identify operational inefficiencies and revenue optimization opportunities. Combines Python-based exploratory analysis with automated ingestion and executive-ready Power BI dashboards for actionable recommendations.
+            </p>
+            <div class="chips">
+              <span class="chip">EDA</span>
+              <span class="chip">Python</span>
+              <span class="chip">Power BI</span>
+              <span class="chip">Profitability</span>
+              <span class="chip">Operations</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 5 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/ab-testing-regression.png" alt="A/B Testing & Regression thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">A/B Testing and Regression Analysis</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/ab-testing-regression-marketing-campaigns" target="_blank" aria-label="GitHub - A/B Testing & Regression">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              Evaluates the effectiveness of Facebook Ads versus Google AdWords using one year of daily campaign data. Applies controlled experimentation and regression modeling to test statistical significance, quantify channel impact, and translate results into ROI-focused spend recommendations.
+            </p>
+            <div class="chips">
+              <span class="chip">A/B testing</span>
+              <span class="chip">Hypothesis</span>
+              <span class="chip">Regression</span>
+              <span class="chip">Inference</span>
+              <span class="chip">Marketing</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 6 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/credit-card-fraud-detection.png" alt="Credit Card Fraud Detection thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">Credit Card Fraud Detection Analysis</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/CC-Fraud-Detection-ML-Rules-LLM" target="_blank" aria-label="GitHub - Credit Card Fraud Detection">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              Converts raw transaction data into approve, review, or block decisions. Combines ML risk scoring with business rules and operational constraints to reduce fraud loss while minimizing customer friction and staying within manual review capacity.
+            </p>
+            <div class="chips">
+              <span class="chip">Fraud</span>
+              <span class="chip">ML</span>
+              <span class="chip">Thresholds</span>
+              <span class="chip">Precision/Recall</span>
+              <span class="chip">Decisioning</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 7 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/customer-churn-prediction.png" alt="Customer Churn Prediction thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">Customer Churn Prediction with Machine Learning</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/Customer-Churn-Predcition-Using-Machine-Learning" target="_blank" aria-label="GitHub - Customer Churn Prediction">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              Uses machine learning to identify customers at high risk of leaving a telecom service. Analyzes demographics, account details, usage, and billing patterns to uncover churn drivers and build predictive models to support proactive retention strategies.
+            </p>
+            <div class="chips">
+              <span class="chip">Churn</span>
+              <span class="chip">Feature engineering</span>
+              <span class="chip">Classification</span>
+              <span class="chip">ROC-AUC</span>
+              <span class="chip">Retention</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 8 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/walmart-sales-sql.png" alt="Walmart Sales SQL thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">Walmart Sales Analysis with SQL</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/Walmart-Sales-Data-Analysis-Using-SQL" target="_blank" aria-label="GitHub - Walmart Sales SQL Analysis">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              SQL-driven analysis of sales patterns, aggregations, joins, window functions, and time-series exploration to generate demand and trend insights with practical implications for merchandising and operations.
+            </p>
+            <div class="chips">
+              <span class="chip">SQL</span>
+              <span class="chip">Joins</span>
+              <span class="chip">Windows</span>
+              <span class="chip">Time</span>
+              <span class="chip">Trends</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- # 9 -->
+        <div class="project-card">
+          <img class="project-thumb" src="images/customer-behavior-analysis.png" alt="Customer Behavior Analysis thumbnail" />
+          <div class="project-body">
+            <div class="project-top">
+              <div class="project-title">Customer Behavior Analysis</div>
+              <div class="icon-row">
+                <a class="icon-link" href="https://github.com/bitanmani/Customer-Shopping-Behavior-Analysis" target="_blank" aria-label="GitHub - Customer Behavior Analysis">
+                  <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <p class="project-desc">
+              Combines SQL, Python, and Power BI to understand how customers browse, purchase, and respond to pricing and promotions. Analyzes frequency, spend behavior, and product preferences to drive segmentation, retention, and marketing strategy insights.
+            </p>
+            <div class="chips">
+              <span class="chip">SQL</span>
+              <span class="chip">Python</span>
+              <span class="chip">Power BI</span>
+              <span class="chip">Segmentation</span>
+              <span class="chip">Behavior</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- # TABLEAU SECTION -->
+    <section id="tableau" class="section">
+      <h2>Tableau Public Profile</h2>
+      <div class="underline"></div>
+
+      <div class="link-box">
+        View my Tableau Public profile here:
+        <a href="https://public.tableau.com/app/profile/bitan.mani/vizzes" target="_blank">public.tableau.com/app/profile/bitan.mani/vizzes</a>
+      </div>
+    </section>
+
+    <!-- # CERTIFICATIONS SECTION -->
+    <section id="certs" class="section">
+      <h2>Certifications</h2>
+      <div class="underline"></div>
+
+      <div class="cert-list">
+        <div class="cert-item">
+          <span>CSPO</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- # CONTACT SECTION -->
+    <section id="contact" class="section">
+      <h2>Contact</h2>
+      <div class="underline"></div>
+
+      <div class="contact-card">
+        <div class="contact-row">
+          <div class="label">Email</div>
+          <div>bitanmani1995@gmail.com</div>
+
+          <div class="label">Phone</div>
+          <div>520-535-8423</div>
+
+          <div class="label">Address</div>
+          <div>United States (Open to relocation anywhere within the US)</div>
+        </div>
+
+        <div class="contact-actions">
+          <!-- # GitHub icon button (link embedded in icon/button) -->
+          <a class="btn primary" href="https://github.com/bitanmani" target="_blank" aria-label="GitHub Profile">
+            <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 .5C5.73.5.75 5.62.75 12c0 5.1 3.29 9.41 7.86 10.94.58.11.79-.26.79-.57v-2.02c-3.2.72-3.88-1.57-3.88-1.57-.52-1.36-1.28-1.72-1.28-1.72-1.05-.73.08-.72.08-.72 1.16.08 1.77 1.22 1.77 1.22 1.03 1.79 2.7 1.27 3.36.97.1-.77.4-1.27.72-1.56-2.55-.3-5.23-1.31-5.23-5.83 0-1.29.45-2.34 1.18-3.17-.12-.3-.51-1.5.11-3.13 0 0 .97-.32 3.18 1.21.92-.26 1.9-.39 2.88-.39s1.96.13 2.88.39c2.2-1.53 3.17-1.21 3.17-1.21.62 1.63.23 2.83.11 3.13.73.83 1.18 1.88 1.18 3.17 0 4.53-2.69 5.52-5.25 5.82.41.36.78 1.08.78 2.18v3.23c0 .32.21.69.8.57 4.56-1.54 7.85-5.84 7.85-10.94C23.25 5.62 18.27.5 12 .5z"/>
+            </svg>
+            GitHub
+          </a>
+
+          <!-- # LinkedIn icon button (link embedded in icon/button) -->
+          <a class="btn" href="https://www.linkedin.com/in/bitan-mani/" target="_blank" aria-label="LinkedIn Profile">
+            <svg class="svg-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.45 20.45h-3.55v-5.56c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.44-2.13 2.94v5.66H9.37V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.35-1.85 3.58 0 4.24 2.36 4.24 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.46C23.2 24 24 23.23 24 22.28V1.72C24 .77 23.2 0 22.23 0z"/>
+            </svg>
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- # FOOTER -->
+  <div class="footer">© 2026 Bitan Mani</div>
+
+  <script>
+    // # Switch tabs by showing the correct section
+    function openTab(targetId) {
+      // # Remove active class from all tabs
+      document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+      // # Remove active class from all sections
+      document.querySelectorAll(".section").forEach((s) => s.classList.remove("active"));
+
+      // # Activate matching tab
+      document.querySelector(`.tab[data-target="${targetId}"]`).classList.add("active");
+      // # Activate matching section
+      document.getElementById(targetId).classList.add("active");
+
+      // # Scroll to the top of the card for a clean transition
+      document.querySelector(".card").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    // # Attach click handlers to each tab button
+    document.querySelectorAll(".tab").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        // # Read which section this tab should open
+        const targetId = btn.getAttribute("data-target");
+        // # Open that tab
+        openTab(targetId);
       });
-
-      // # Click behavior for "View Projects" / "Contact" buttons inside sections
-      document.querySelectorAll("[data-jump]").forEach((el) => {
-        el.addEventListener("click", () => activateTab(el.getAttribute("data-jump")));
-      });
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>
